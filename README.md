@@ -10,16 +10,16 @@ Clona este repositorio de git, por ejemplo desde una terminal de Linux o MacOS:
 # Probablemente necesites que quien te asignó la prueba te de permisos explícitos
 # para clonar el repositorio
 
-git clone https://gitlab.com/dev-innmortal/ejercicio_raster.git ~/Projects/ejercicio_raster
+git clone https://github.com/AGRIICOLA/ejercicio_raster /home/artorres/projects/innmortal/ejercicio_raster
 ```
 
-Para este documento se asume que el repositorio está en la ruta local:  `/home/arturo/Projects/ejercicio_raster/`
+En este documento se asume que el repositorio está en la ruta local:  `/home/artorres/projects/innmortal/ejercicio_raster/`
 
 En adelante cambia las direcciones según corresponda a tu entorno de trabajo local
 
 ### Entorno de ejecución
 
-Para este ejercicio necesitas una distribución de python, puedes usar pip, anaconda, etc. Es recomendable que generes un entorno virtual para evitar cambios innecesarios en tu sistema operativo.
+Para este ejercicio necesitas python (3.11 o mayor) y un gestor de paquetes (pip, anaconda, etc). Es recomendable que generes un entorno virtual para evitar cambios innecesarios en tu sistema operativo.
 
 También necesitas instalar los siguientes paquetes: rasterio, numpy, matplotlib
 
@@ -52,7 +52,7 @@ from rasterio import open
 from matplotlib import pyplot
 from numpy import nan, nanmin, nanmax
 
-image = open('/home/arturo/Projects/ejercicio_raster/insumos/1021_20230404_ndvi.tiff')
+image = open('./insumos/1021_20230404_ndvi.tiff')
 
 print(f'File name: {image.name}')
 print(f'Open mode: {image.mode}')
@@ -70,7 +70,7 @@ pyplot.imshow(pixels, cmap='RdYlGn')
 pyplot.show()
 ```
 ```bash
-File name: /home/arturo/Projects/ejercicio_raster/insumos/1021_20230404_ndvi.tiff
+File name: ./insumos/1021_20230404_ndvi.tiff
 Open mode: r
 Metadata: {'driver': 'GTiff', 'dtype': 'float64', 'nodata': -999.0, 'width': 173, 'height': 185, 'count': 1, 'crs': CRS.from_epsg(3857), 'transform': Affine(10.65825353862634, 0.0, -11320094.309662528,
        0.0, -10.65825353862634, 2190147.407727897)}
@@ -107,7 +107,7 @@ from rasterio import open
 from matplotlib import pyplot
 from numpy import nan
 
-ndvi = open('/home/arturo/Projects/ejercicio_raster/insumos/1021_20230404_ndvi.tiff')
+ndvi = open('./insumos/1021_20230404_ndvi.tiff')
 
 pixels = ndvi.read(ndvi.meta.get('count'))
 
@@ -121,7 +121,7 @@ pyplot.show()
 ![img_05.png](./recursos/imagenes/img_05.png)
 
 ```python
-ndwi = open('/home/arturo/Projects/ejercicio_raster/insumos/1021_20230404_ndwi.tiff')
+ndwi = open('./insumos/1021_20230404_ndwi.tiff')
 
 pixels = ndwi.read(ndwi.meta.get('count'))
 
@@ -135,7 +135,7 @@ pyplot.show()
 
 El objetivo de esta prueba es que escribas un programa con python que tome como insumo los archivos tiff del ejemplo y genere una imagen como las de pyplot en un archivo PNG, con las siguientes restricciones:
 
-- No utilices pyplot o algo equivalente, la generación del PNG con la paleta de color puede hacerse exclusivamente con numpy, aunque sí puedes utilizar cualquier paquete de Python para escribir el PNG
+- No utilices pyplot o algo equivalente, la generación del PNG con la paleta de color puede hacerse exclusivamente con numpy, aunque sí puedes utilizar cualquier paquete de Python para escribir el PNG en un archivo local.
 - Haz que los valores de -999 se representen como píxeles totalmente transparentes en el PNG resultante
 - La imagen **1021_20230330_ndvi.tiff** tiene otro valor con un significado especial, el -998, que corresponde a nubes. El programa que hagas debe dibujar esos píxeles en color blanco.
 - El programa debe funcionar para cualquier imagen con datos similares, no solo los que están en el repositorio.
@@ -197,7 +197,7 @@ wavelength = [0.4924, # B02
              2.1857   # B12
            ]
 
-sample = open('/home/arturo/Projects/ejercicio_raster/insumos/sentinel_2_bands/1147.tif')
+sample = open('./insumos/sentinel_2_bands/1147.tif')
 
 band_count = sample.meta['count']
 nodata_value = sample.meta['nodata']
@@ -282,7 +282,7 @@ Tomando como base el código anterior, puedes probar las firmas espectrales en u
 
 from numpy import logical_and, array
 
-test_area = open('/home/arturo/Projects/ejercicio_raster/insumos/test_area.tif')
+test_area = open('./insumos/test_area.tif')
 # ~ 338 km², 998 x 3556 array
 
 def test_signature_match(pixel_value, band_number):
@@ -319,7 +319,7 @@ metadata.update({'nodata': 0, 'count': 1, 'dtype': 'uint8'})
 
 # Save matches array as a georeferenced tif file
 with open(
-   '/home/arturo/Projects/ejercicio_raster/salida/classification.tif',
+   './salida/classification.tif',
    'w', compress='DEFLATE', predictor=2, **metadata) as tiff:
    tiff.write(matches, indexes=1)
 
@@ -347,7 +347,7 @@ El objetivo de esta prueba es revisar el procedimiento actual y argumentar posib
 ![img_10.png](./recursos/imagenes/img_10.png)
   - ¿Qué mejoras en el procedimiento propondrías para aceptar o rechazar la hipótesis de coincidencia con una firma espectral?
   - ¿Qué modificaciones propondrías a la metodología actual basándose en esta información?
-- En el ejercicio se usó una sola muestra, de 24 píxeles en total. En el directorio `/home/arturo/Projects/ejercicio_raster/insumos/sentinel_2_bands` hay otras 5 muestras de la misma especie (alfalfa) en condiciones muy similares. Si obtienes las firmas espectrales de las 6 muestras verás que tienen parámetros muy similares, pero ninguna es igual.
+- En el ejercicio se usó una sola muestra, de 24 píxeles en total. En el directorio `~/projects/innmortal/ejercicio_raster/insumos/sentinel_2_bands` hay otras 5 muestras de la misma especie (alfalfa) en condiciones muy similares. Si obtienes las firmas espectrales de las 6 muestras verás que tienen parámetros muy similares, pero ninguna es igual.
   - ¿Cómo tratarías los datos obtenidos de estás muestras?
   - ¿Cómo integrarías los parámetros de todas las muestras para obtener una firma común?
 
